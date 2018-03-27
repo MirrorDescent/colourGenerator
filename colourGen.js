@@ -1,9 +1,15 @@
 var test = document.getElementById("test");
-var cRow = test.insertRow();
-var lRow = test.insertRow();
-var pRow = test.insertRow();
+
+var lRow;
+var cRow;
+var pRow;
+createRows();
+
+var noRows = 0;
+var noCells = 0;
 
 function newColour() {
+	deleteAll();
 	var stringOne = document.getElementById("myTextarea").value.toLowerCase();
 	stringOne = stringOne.replace(/[^\w\s]|_/g, "")
 	var stringArray = stringOne.split(" ");
@@ -19,6 +25,20 @@ function newColour() {
 	}
 }
 
+function deleteAll() {
+		test.innerHTML = "";
+		
+		lRow = test.insertRow();
+		cRow = test.insertRow();
+		pRow = test.insertRow();
+}
+
+function createRows() {
+	lRow = test.insertRow();
+	cRow = test.insertRow();
+	pRow = test.insertRow();
+	noRows = noRows + 1;
+}
 function divideText(string) {
 	var len = string.length
 	var partsLen = Math.ceil(len / 3);
@@ -118,21 +138,51 @@ function toRGB(rangeArray, unitArray, word) {
 	var colour = "rgb(" + r + "," + g + "," + b + ")";	
 	
 	console.log(colour);
-
-	var newCell = cRow.insertCell();
-	newCell.width = "100px";
-	newCell.height = "100px";
-	newCell.style.backgroundColor = colour;
+	var currentWidth = noCells * 100;
+	var width = document.getElementById("wrapper").offsetWidth;
 	
-	var lCell = lRow.insertCell();
-	lCell.width = "100px";
-	lCell.height = "20px";
-	lCell.style.textAlign = "center";
-	lCell.innerHTML = word;
+	if(currentWidth + 100 < width) {
+		var newCell = cRow.insertCell();
+		newCell.width = "100px";
+		newCell.height = "100px";
+		newCell.style.borderRadius = "10px";
+		newCell.style.backgroundColor = colour;
+		
+		var lCell = lRow.insertCell();
+		lCell.width = "100px";
+		lCell.height = "20px";
+		lCell.style.textAlign = "center";
+		lCell.innerHTML = word;
+		
+		var pCell = pRow.insertCell();
+		pCell.width = "100px";
+		pCell.height = "20px";
+		pCell.style.textAlign = "center";
+		pCell.innerHTML = colour;
+	}
+	else{
+		noCells = 0;
+		noRows = noRows + 1;
+		createRows();
+		
+		var newCell = cRow.insertCell();
+		newCell.width = "100px";
+		newCell.height = "100px";
+		newCell.style.borderRadius = "10px";
+		newCell.style.backgroundColor = colour;
+		
+		var lCell = lRow.insertCell();
+		lCell.width = "100px";
+		lCell.height = "20px";
+		lCell.style.textAlign = "center";
+		lCell.innerHTML = word;
+		
+		var pCell = pRow.insertCell();
+		pCell.width = "100px";
+		pCell.height = "20px";
+		pCell.style.textAlign = "center";
+		pCell.innerHTML = colour;
+	}
 	
-	var pCell = pRow.insertCell();
-	pCell.width = "100px";
-	pCell.height = "20px";
-	pCell.style.textAlign = "center";
-	pCell.innerHTML = colour;
+	noCells = noCells + 1;
 }
