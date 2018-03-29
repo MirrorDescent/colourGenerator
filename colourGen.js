@@ -13,9 +13,13 @@ function changeMode() {
 	if(currentMode == "rgb") {
 		currentMode = "hsl";
 		btn.onclick = newHSL;
+		btn.className = "btnH";
+		document.getElementById("myTextarea").className = "textH";
 	} else {
 		currentMode = "rgb";
 		btn.onclick = newRGB;
+		btn.className = "btnR";
+		document.getElementById("myTextarea").className = "textR";
 	}
 }
 	
