@@ -15,11 +15,31 @@ function changeMode() {
 		btn.onclick = newHSL;
 		btn.className = "btnH";
 		document.getElementById("myTextarea").className = "textH";
+		
+		document.getElementById("gradient1").style.opacity = 0;
+		document.getElementById("gradient2").style.opacity = 1;
+		document.getElementById("switchText1").style.opacity = 0;
+		document.getElementById("switchText2").style.opacity = 1;
+	} else if(currentMode == "hsl") {
+		currentMode = "hex";
+		btn.onclick = newHex;
+		btn.className = "btnX";
+		document.getElementById("myTextarea").className = "textX";
+		
+		document.getElementById("gradient2").style.opacity = 0;
+		document.getElementById("gradient3").style.opacity = 1;
+		document.getElementById("switchText2").style.opacity = 0;
+		document.getElementById("switchText3").style.opacity = 1;
 	} else {
 		currentMode = "rgb";
 		btn.onclick = newRGB;
 		btn.className = "btnR";
 		document.getElementById("myTextarea").className = "textR";
+		
+		document.getElementById("gradient3").style.opacity = 0;
+		document.getElementById("gradient1").style.opacity = 1;
+		document.getElementById("switchText3").style.opacity = 0;
+		document.getElementById("switchText1").style.opacity = 1;
 	}
 }
 	
@@ -53,6 +73,19 @@ function newRGB() {
 			console.log(rangeArray);
 			console.log(unitArray);
 			toRGB(rangeArray, unitArray,stringArray[i]);
+		}
+	}
+}
+
+function newHex() {
+	deleteAll();
+	var stringOne = document.getElementById("myTextarea").value.toLowerCase();
+	stringOne = stringOne.replace(/[^\w\s]|_/g, "")
+	var stringArray = stringOne.split(" ");
+	for(var i=0; i < stringArray.length; i++) {
+		if(stringArray[i].length > 2) {
+			colour = hexCalc(stringArray[i]);
+			toHex(colour,stringArray[i]);
 		}
 	}
 }
@@ -127,6 +160,19 @@ function getRanges(sectionArray) {
 		}
 	}
 	return rangeArray;
+}
+
+function hexCalc(string) {
+	var hash = 0;
+    for (var i = 0; i < string.length; i++) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var colour = '#';
+    for (var i = 0; i < 3; i++) {
+        var value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
 }
 
 function parameterChecker(section) {
@@ -397,3 +443,55 @@ function toRGB(rangeArray, unitArray, word) {
 	
 	noCells = noCells + 1;
 }
+
+function toHex(colour,word) {
+	console.log(colour);
+	var currentWidth = noCells * 100;
+	var width = document.getElementById("wrapper").offsetWidth;
+	
+	if(currentWidth + 100 < width) {
+		var newCell = cRow.insertCell();
+		newCell.width = "100px";
+		newCell.height = "100px";
+		newCell.style.borderRadius = "10px";
+		newCell.style.backgroundColor = colour;
+		
+		var lCell = lRow.insertCell();
+		lCell.width = "100px";
+		lCell.height = "20px";
+		lCell.style.textAlign = "center";
+		lCell.innerHTML = word;
+		
+		var pCell = pRow.insertCell();
+		pCell.width = "100px";
+		pCell.height = "20px";
+		pCell.style.textAlign = "center";
+		pCell.innerHTML = colour;
+	}
+	else{
+		noCells = 0;
+		noRows = noRows + 1;
+		createRows();
+		
+		var newCell = cRow.insertCell();
+		newCell.width = "100px";
+		newCell.height = "100px";
+		newCell.style.borderRadius = "10px";
+		newCell.style.backgroundColor = colour;
+		
+		var lCell = lRow.insertCell();
+		lCell.width = "100px";
+		lCell.height = "20px";
+		lCell.style.textAlign = "center";
+		lCell.innerHTML = word;
+		
+		var pCell = pRow.insertCell();
+		pCell.width = "100px";
+		pCell.height = "20px";
+		pCell.style.textAlign = "center";
+		pCell.innerHTML = colour;
+	}
+	
+	noCells = noCells + 1;
+}
+	
